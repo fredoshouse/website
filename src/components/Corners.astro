@@ -1,0 +1,255 @@
+---
+// Fixed corner UI on every page: the book in the top left, and the theme
+// toggle + the + menu in the top right.
+import { getNow } from "../lib";
+import { LIFE_PAGES, SITE } from "../site";
+
+const now = await getNow();
+const book = now.reading;
+---
+
+<a
+  class="corner book"
+  href={book.href || "/#right-now"}
+  data-track="book click"
+  data-track-title={book.title}
+  title={`Reading ${book.title}${book.by ? ` by ${book.by}` : ""}`}
+>
+  <span class="book-icon" aria-hidden="true">📖</span>
+  <span class="book-text">
+    <span class="k">reading</span>
+    <span class="t">{book.title}</span>
+  </span>
+</a>
+
+<div class="corner controls">
+  <button type="button" class="round" id="theme-toggle" aria-label="Switch light or dark mode">
+    <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" /></svg>
+    <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" /></svg>
+  </button>
+  <button type="button" class="round plus" id="menu-open" aria-label="Open menu" aria-haspopup="dialog" aria-controls="life-menu">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" /></svg>
+  </button>
+</div>
+
+<dialog id="life-menu" class="menu" aria-label="All pages">
+  <div class="menu-head">
+    <span>{SITE.title}</span>
+    <button type="button" class="round" id="menu-close" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+    </button>
+  </div>
+  <ul>
+    {
+      LIFE_PAGES.map((p) => (
+        <li>
+          <a href={p.href} data-track="menu click" data-track-label={p.label}>
+            <span class="m-label">{p.label}</span>
+            <span class="m-note">{p.note}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</dialog>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.getElementById("theme-toggle")!;
+  const isDark = () =>
+    root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  toggle.addEventListener("click", () => {
+    const next = isDark() ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
+  });
+
+  const menu = document.getElementById("life-menu") as HTMLDialogElement;
+  document.getElementById("menu-open")!.addEventListener("click", () => menu.showModal());
+  document.getElementById("menu-close")!.addEventListener("click", () => menu.close());
+  // click on the backdrop closes it
+  menu.addEventListener("click", (e) => {
+    if (e.target === menu) menu.close();
+  });
+  menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => menu.close()));
+</script>
+
+<style>
+  .corner {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 1rem);
+    z-index: 20;
+  }
+  .book {
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: min(16rem, 45vw);
+    padding: 0.35rem 0.8rem 0.35rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid var(--faint);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(8px);
+    text-decoration: none;
+    font-family: var(--sans);
+    line-height: 1.15;
+  }
+  .book:hover {
+    border-color: var(--accent);
+    color: inherit;
+  }
+  .book-icon {
+    display: grid;
+    place-items: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    background: var(--card);
+    font-size: 0.95rem;
+    flex: none;
+  }
+  .book-text {
+    display: grid;
+    min-width: 0;
+  }
+  .book .k {
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+  .book .t {
+    font-size: 0.82rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .controls {
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+  .round {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--faint);
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(8px);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .round:hover,
+  .round:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
+  .round svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+  .plus svg {
+    transition: transform 0.2s;
+  }
+  .plus:hover svg {
+    transform: rotate(90deg);
+  }
+  .moon {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .sun {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .moon {
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .sun {
+      display: none;
+    }
+    :global(:root:not([data-theme="light"])) .moon {
+      display: block;
+    }
+  }
+
+  /* Phones: pin to the top of the page instead of floating over content */
+  @media (max-width: 640px) {
+    .corner {
+      position: absolute;
+      top: 0.75rem;
+    }
+    .book {
+      left: 0.75rem;
+    }
+    .controls {
+      right: 0.75rem;
+    }
+  }
+
+  .menu {
+    width: min(22rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 6rem);
+    margin: 4.5rem 1rem auto auto;
+    padding: 0;
+    border: 1px solid var(--faint);
+    border-radius: 16px;
+    background: var(--bg);
+    color: var(--fg);
+    box-shadow: 0 20px 60px rgb(0 0 0 / 0.18);
+  }
+  .menu::backdrop {
+    background: rgb(10 15 25 / 0.25);
+    backdrop-filter: blur(2px);
+  }
+  .menu-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.75rem 0.5rem 1.25rem;
+    font-family: var(--sans);
+    font-weight: 700;
+  }
+  .menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.25rem 0.5rem 0.75rem;
+  }
+  .menu a {
+    display: grid;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    text-decoration: none;
+  }
+  .menu a:hover,
+  .menu a:focus-visible {
+    background: var(--card);
+    color: inherit;
+    outline: none;
+  }
+  .menu .m-label {
+    font-weight: 500;
+  }
+  .menu .m-note {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu[open] {
+      animation: pop 0.18s ease-out;
+    }
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+      }
+    }
+  }
+</style>

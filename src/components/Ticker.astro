@@ -3,8 +3,6 @@ import { getNow } from "../lib";
 
 const now = await getNow();
 const items = [
-  { k: "reading", v: `${now.reading.title}${now.reading.by ? ` by ${now.reading.by}` : ""}` },
-  { k: "on repeat", v: `${now.listening.title}${now.listening.by ? ` by ${now.listening.by}` : ""}` },
   { k: "accounts", v: `${now.accounts} going at once` },
   ...now.onMyMind.slice(0, 1).map((m) => ({ k: "on my mind", v: m.text })),
   { k: "based in", v: "Seattle" },

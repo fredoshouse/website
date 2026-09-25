@@ -3,7 +3,6 @@ import Base from "../layouts/Base.astro";
 import PostList from "../components/PostList.astro";
 import Ticker from "../components/Ticker.astro";
 import RightNow from "../components/RightNow.astro";
-import Timeline from "../components/Timeline.astro";
 import Subscribe from "../components/Subscribe.astro";
 import { getAllWriting } from "../lib";
 import { SITE } from "../site";
@@ -49,7 +48,7 @@ const recent = (await getAllWriting()).slice(0, 5);
   </p>
   <p>I’m still figuring out the balance.</p>
 
-  <Timeline />
+  <p class="path-link"><a href="/timeline">The path so far, 1996 to now →</a></p>
 
   <RightNow />
 

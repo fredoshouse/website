@@ -1,0 +1,11 @@
+---
+import Base from "../layouts/Base.astro";
+import Timeline from "../components/Timeline.astro";
+import { TIMELINE_START } from "../timeline";
+---
+
+<Base title="The path so far" description={`Fredo's timeline, ${TIMELINE_START} to now.`}>
+  <h1>The path so far</h1>
+  <p class="lede">{TIMELINE_START} to now. Newest at the top.</p>
+  <Timeline />
+</Base>

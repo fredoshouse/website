@@ -4,6 +4,7 @@
   --muted: #667085;
   --faint: #d2d9e3;
   --accent: #2f5aa8;
+  --card: #f6f8fb;
   /* One face for everything (Public Sans). The three roles stay separate
      so a second face can slot back in later without touching components. */
   --serif: "Public Sans", "Helvetica Neue", Arial, sans-serif;
@@ -13,15 +14,26 @@
   color-scheme: light;
 }
 
+/* Dark follows the system unless someone flips the toggle (data-theme). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #161b24;
     --fg: #e6eaf0;
     --muted: #97a1b2;
     --faint: #2c3442;
     --accent: #9dbcf0;
+    --card: #1c2230;
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #161b24;
+  --fg: #e6eaf0;
+  --muted: #97a1b2;
+  --faint: #2c3442;
+  --accent: #9dbcf0;
+  --card: #1c2230;
+  color-scheme: dark;
 }
 
 *,

@@ -17,6 +17,17 @@ export const NAV = [
   { href: "mailto:alfred@fredoshouse.com", label: "contact" },
 ];
 
+// Everything in the + menu. Add a page here and it shows up in the menu.
+export const LIFE_PAGES = [
+  { href: "/", label: "Home", note: "Start here" },
+  { href: "/ask", label: "Ask Fredo", note: "Ask me anything, AI-assisted" },
+  { href: "/writing", label: "Writing", note: "Letters, lessons, case studies" },
+  { href: "/work", label: "What I do", note: "Ghost Note, Integral, Fredo's House" },
+  { href: "/timeline", label: "The path so far", note: "1996 to now" },
+  { href: "/about", label: "The other stuff", note: "Life beyond work" },
+  { href: "/#right-now", label: "Right now", note: "Reading, listening, thinking" },
+];
+
 export const ELSEWHERE = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/alfredadarkwah/" },
   { label: "Email", href: `mailto:${SITE.email}` },

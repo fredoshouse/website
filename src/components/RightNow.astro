@@ -92,7 +92,7 @@ const showMoodboard = now.moodboard.length > 0 || import.meta.env.DEV;
     padding: 1rem;
     border: 1px solid var(--faint);
     border-radius: 10px;
-    background: color-mix(in srgb, var(--bg) 70%, white);
+    background: var(--card);
   }
   .card img,
   .art {
@@ -179,10 +179,5 @@ const showMoodboard = now.moodboard.length > 0 || import.meta.env.DEV;
     font-family: var(--sans);
     font-size: 0.7rem;
     color: var(--muted);
-  }
-  @media (prefers-color-scheme: dark) {
-    .card {
-      background: color-mix(in srgb, var(--bg) 85%, white);
-    }
   }
 </style>

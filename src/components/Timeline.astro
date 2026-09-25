@@ -1,179 +1,105 @@
 ---
-import { getTimeline, TIMELINE_START } from "../timeline";
+// Vertical timeline: every year from TIMELINE_START to now. Years with a
+// stop get an emoji and a card; the rest are small ticks on the line.
+import { getTimeline } from "../timeline";
 
-const years = getTimeline();
+const years = getTimeline().reverse(); // newest at the top
 ---
 
-<section class="timeline" aria-labelledby="timeline-label">
-  <div class="head">
-    <p class="label" id="timeline-label">
-      the path so far <span class="span">· {TIMELINE_START} → now</span>
-    </p>
-    <div class="arrows">
-      <button type="button" data-dir="-1" aria-label="Earlier">←</button>
-      <button type="button" data-dir="1" aria-label="Later">→</button>
-    </div>
-  </div>
-
-  <ol class="track" tabindex="0" aria-label={`Timeline from ${TIMELINE_START} to now, scroll sideways`}>
-    {
-      years.map(({ year, stop, now }) => (
-        <li class:list={["year", { filled: stop, now }]}>
-          <span class="when">{now ? `${year} · now` : year}</span>
-          <span class="rail">
-            <span class="dot" aria-hidden="true">
-              {stop && (stop.icon || "•")}
-            </span>
-          </span>
-          {stop && (
-            <div class="body">
-              <p class="title">{stop.title}</p>
-              {stop.where && (
-                <p class="where">{stop.href ? <a href={stop.href}>{stop.where}</a> : stop.where}</p>
-              )}
-              {stop.note && <p class="note">{stop.note}</p>}
-            </div>
-          )}
-        </li>
-      ))
-    }
-  </ol>
-</section>
-
-<script>
-  document.querySelectorAll<HTMLElement>(".timeline").forEach((root) => {
-    const track = root.querySelector<HTMLElement>(".track")!;
-    const [prev, next] = root.querySelectorAll<HTMLButtonElement>(".arrows button");
-    const update = () => {
-      prev.disabled = track.scrollLeft <= 2;
-      next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
-      track.classList.toggle("at-end", next.disabled);
-    };
-    for (const b of [prev, next]) {
-      b.addEventListener("click", () => {
-        track.scrollBy({ left: Number(b.dataset.dir) * track.clientWidth * 0.8, behavior: "smooth" });
-      });
-    }
-    track.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-  });
-</script>
+<ol class="timeline">
+  {
+    years.map(({ year, stop, now }) => (
+      <li class:list={["year", { filled: stop, now }]}>
+        <span class="when">{now ? `${year} · now` : year}</span>
+        <span class="dot" aria-hidden="true">
+          {stop && (stop.icon || "•")}
+        </span>
+        {stop && (
+          <div class="body">
+            <p class="title">{stop.title}</p>
+            {stop.where && (
+              <p class="where">{stop.href ? <a href={stop.href}>{stop.where}</a> : stop.where}</p>
+            )}
+            {stop.note && <p class="note">{stop.note}</p>}
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ol>
 
 <style>
   .timeline {
-    margin: 3rem 0;
-    --when: 1.6rem;
-    --rail: 2.25rem;
-  }
-  .head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-  .span {
-    opacity: 0.8;
-  }
-  .arrows {
-    display: flex;
-    gap: 0.5rem;
-  }
-  .arrows button {
-    font: inherit;
-    font-family: var(--sans);
-    width: 2rem;
-    height: 2rem;
-    border-radius: 999px;
-    border: 1px solid var(--faint);
-    background: transparent;
-    color: var(--fg);
-    cursor: pointer;
-  }
-  .arrows button:hover:not(:disabled),
-  .arrows button:focus-visible {
-    border-color: var(--accent);
-    outline: none;
-  }
-  .arrows button:disabled {
-    opacity: 0.35;
-    cursor: default;
-  }
-  .track {
+    --when: 5rem;
+    --dot: 2.5rem;
+    --gap: 1rem;
     list-style: none;
-    margin: 0;
-    padding: 0 0 1rem;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scrollbar-width: thin;
-    /* the line every year sits on */
-    background: linear-gradient(var(--faint), var(--faint)) 0 calc(var(--when) + var(--rail) / 2) / 100% 1px
-      no-repeat;
-    background-attachment: local;
-    mask-image: linear-gradient(90deg, #000 88%, transparent);
+    margin: 2rem 0;
+    padding: 0;
+    position: relative;
   }
-  .track.at-end {
-    mask-image: none;
-  }
-  .track:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 4px;
+  /* the line */
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    left: calc(var(--when) + var(--gap) + var(--dot) / 2);
+    width: 1px;
+    background: var(--faint);
   }
   .year {
-    flex: 0 0 3.25rem;
-    scroll-snap-align: start;
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--when) var(--dot) 1fr;
+    align-items: start;
+    column-gap: var(--gap);
+    min-height: 1.6rem;
   }
   .year.filled {
-    flex-basis: max(12rem, 40%);
-    padding-right: 1.5rem;
-  }
-  @media (max-width: 480px) {
-    .year.filled {
-      flex-basis: 72%;
-    }
+    padding: 0.75rem 0 1.5rem;
   }
   .when {
-    display: block;
-    height: var(--when);
+    text-align: right;
     font-family: var(--sans);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--muted);
-    white-space: nowrap;
+    line-height: 1.6rem;
   }
   .filled .when {
     color: var(--fg);
-    font-weight: 500;
+    font-weight: 700;
+    line-height: var(--dot);
   }
   .now .when {
     color: var(--accent);
   }
-  .rail {
-    display: flex;
-    align-items: center;
-    height: var(--rail);
-  }
   .dot {
+    justify-self: center;
     width: 0.45rem;
     height: 0.45rem;
+    margin-top: 0.575rem;
     border-radius: 50%;
     background: var(--faint);
+    position: relative;
   }
   .filled .dot {
     display: grid;
     place-items: center;
-    width: var(--rail);
-    height: var(--rail);
+    width: var(--dot);
+    height: var(--dot);
+    margin-top: 0;
     background: var(--bg);
     border: 1px solid var(--faint);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     line-height: 1;
   }
   .now .dot {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
   }
   .body {
-    margin-top: 0.75rem;
+    padding-top: 0.35rem;
   }
   .title {
     margin: 0;
@@ -187,8 +113,14 @@ const years = getTimeline();
     font-size: 0.95rem;
   }
   .note {
-    margin: 0.5rem 0 0;
-    font-size: 0.95rem;
+    margin: 0.4rem 0 0;
+    font-size: 0.98rem;
     line-height: 1.55;
+  }
+  @media (max-width: 480px) {
+    .timeline {
+      --when: 3.25rem;
+      --gap: 0.75rem;
+    }
   }
 </style>
