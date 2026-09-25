@@ -42,7 +42,7 @@ const showMoodboard = now.moodboard.length > 0 || import.meta.env.DEV;
     <span>accounts going at once. It's a lot. I like it.</span>
   </div>
 
-  <p class="k">on my mind</p>
+  {now.onMyMind.length > 0 && <p class="k">on my mind</p>}
   <ul class="mind">
     {
       now.onMyMind.map((m) => (

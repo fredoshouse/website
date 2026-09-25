@@ -43,6 +43,9 @@ export function getTimeline(): Year[] {
   const end = Math.max(new Date().getFullYear(), ...Object.keys(STOPS).map(Number));
   return Array.from({ length: end - TIMELINE_START + 1 }, (_, i) => {
     const year = TIMELINE_START + i;
-    return { year, stop: STOPS[year], now: year === end };
+    const stop = STOPS[year];
+    // Placeholder notes stay out of the live site until they're written.
+    const note = stop?.note?.startsWith("TODO") ? undefined : stop?.note;
+    return { year, stop: stop && { ...stop, note }, now: year === end };
   });
 }

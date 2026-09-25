@@ -100,6 +100,7 @@ async function build() {
   const [book, music] = await Promise.all([goodreadsCurrentlyReading(), lastfmRecent()]);
   return {
     ...NOW,
+    onMyMind: NOW.onMyMind.filter((m) => !isTodo(m.text)),
     reading: merge({ ...NOW.reading, by: NOW.reading.author }, book),
     listening: merge({ ...NOW.listening, by: NOW.listening.artist }, music),
   };
