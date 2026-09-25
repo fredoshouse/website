@@ -1,7 +1,6 @@
 import { getCollection } from "astro:content";
 import { NEWSLETTER, BEEHIIV_UTM } from "./site";
 import { newsletterPosts } from "./integrations";
-import { BEEHIIV_POSTS } from "./letters";
 
 export async function getPosts() {
   const posts = await getCollection("writing", ({ data }) => !data.draft);
@@ -16,8 +15,9 @@ export interface WritingItem {
   external: boolean;
 }
 
-// Posts from this repo plus letters pulled from beehiiv, newest first.
-// If a letter exists in both places, the local copy wins.
+// Every letter lives on this site (src/content/writing). If the beehiiv RSS
+// feed is set, anything published there that hasn't been imported yet still
+// shows up, linking out to beehiiv until it's pulled in.
 let writingCache: Promise<WritingItem[]> | undefined;
 export function getAllWriting() {
   return (writingCache ??= (async () => {
@@ -32,22 +32,10 @@ export function getAllWriting() {
       series: p.data.series,
       external: false,
     }));
-    const base = NEWSLETTER.url.replace(/\/$/, "");
-    for (const p of BEEHIIV_POSTS) {
-      items.push({
-        title: p.title,
-        date: new Date(p.date),
-        href: `${base}/p/${p.slug}?${BEEHIIV_UTM}&utm_campaign=writing`,
-        series: p.series,
-        external: true,
-      });
-    }
-    // Live feed adds anything newer than the snapshot. Match on URL since
-    // snapshot titles are cleaned up.
     const bare = (u: string) => u.split("?")[0].replace(/\/$/, "");
-    const seen = new Set(items.map((i) => bare(i.href)));
+    const imported = new Set(local.map((p) => p.data.originalUrl && bare(p.data.originalUrl)));
     for (const l of letters) {
-      if (seen.has(bare(l.href))) continue;
+      if (imported.has(bare(l.href))) continue;
       const sep = l.href.includes("?") ? "&" : "?";
       items.push({
         title: l.title,

@@ -3,6 +3,7 @@ import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { getPosts, formatDate } from "../../lib";
 import { SERIES } from "../../site";
+import Subscribe from "../../components/Subscribe.astro";
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -14,6 +15,7 @@ export async function getStaticPaths() {
 
 const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
+const minutes = Math.max(1, Math.round((post.body ?? "").split(/\s+/).length / 230));
 ---
 
 <Base title={post.data.title} description={post.data.description}>
@@ -21,18 +23,13 @@ const { Content } = await render(post);
     <p class="muted meta-line">
       <a href="/writing">{SERIES[post.data.series].name}</a>{" · "}
       <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, "long")}</time>
+      {" · "}{minutes} min read
     </p>
     <h1>{post.data.title}</h1>
     <div class="prose">
       <Content />
     </div>
-    {
-      post.data.originalUrl && (
-        <p class="muted">
-          Originally published on <a href={post.data.originalUrl}>LinkedIn</a>.
-        </p>
-      )
-    }
+    <Subscribe />
   </article>
 
   <hr />

@@ -170,8 +170,22 @@ hr {
   border-radius: 3px;
 }
 .prose img {
+  display: block;
   max-width: 100%;
   height: auto;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+/* beehiiv captions come through as an italic line under the image */
+.prose p:has(> img) + p > em:only-child {
+  display: block;
+  margin-top: -0.4rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.prose hr {
+  margin: 2rem 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {
