@@ -8,47 +8,55 @@ const recent = (await getPosts()).slice(0, 5);
 ---
 
 <Base>
-  <h2 class="welcome">Welcome</h2>
+  <h2 class="welcome">Hey, I'm Fredo.</h2>
   <p>
-    I'm Alfred, but most people call me Fredo. I'm an operator: I build the
-    systems, workflows, and teams that let entrepreneurs and agencies do their
-    best work without drowning in it. I write <a href="/writing">letters and
-    lessons</a> about operations, agency life, and the unglamorous parts of
-    building a business.
+    Alfred on paper, Fredo to everyone else. I'm the person who makes sure
+    things actually get done.
   </p>
 
   <p class="label">present</p>
+  <p>Most of my time goes to two places:</p>
   <p>
-    I run <a href="/work">Fredo's House</a>, where I help founders and
-    marketing agencies fix how work actually gets done. I'm also Director of
-    Growth at <a href="https://www.ghostnoteagency.com">Ghost Note Agency</a>.
-    Currently in {SITE.location}.
+    <strong>Growth at <a href="https://www.ghostnoteagency.com">Ghost Note</a>.</strong>{" "}
+    Finding new clients, building relationships, and helping the agency grow.
+  </p>
+  <p>
+    <strong>Operations at Integral.</strong> Keeping projects moving, keeping
+    people unblocked, and making sure nothing falls through the cracks.
+  </p>
+  <p>
+    On any given week I'm running somewhere between 10 and 20 different
+    accounts. It's probably the African in me. Working hard is the only mode I
+    was ever taught.
+  </p>
+  <p>
+    The rest of the time I'm trying to keep my own life afloat and have some
+    fun in {SITE.location}.
   </p>
 
   <p class="label">past</p>
   <p>
-    I started out as a creative project manager and learned quickly that I'm
-    not really a project manager. I'm an operator. Fredo's House grew out of
-    that.
+    I started out as a creative project manager and figured out pretty quickly
+    I'm not really a project manager. I'm an operator. That's where{" "}
+    <a href="/work">Fredo's House</a> came from.
   </p>
 
   {
     recent.length > 0 && (
       <>
-        <p class="label">recent writing</p>
+        <p class="label">stuff I've written</p>
         <PostList posts={recent} />
         <p style="margin-top:1rem">
-          <a href="/writing">All writing →</a>
+          <a href="/writing">All of it →</a>
         </p>
       </>
     )
   }
 
-  <p class="label">say hello</p>
+  <p class="label">say hi</p>
   <p>
-    The best way to reach me is <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
-    If you run a team or an agency and the work feels heavier than it should,
-    I'd love to hear about it.
+    Just email me: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Work
+    stuff, Seattle recs, whatever. I read everything.
   </p>
 </Base>
 

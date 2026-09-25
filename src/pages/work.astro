@@ -2,62 +2,55 @@
 import Base from "../layouts/Base.astro";
 import { SITE } from "../site";
 
-const services = [
+const jobs = [
   {
-    name: "Operations audits",
-    body: "A clear-eyed look at how work moves through your team today: where it stalls, where it's duplicated, and what to fix first.",
+    name: "Ghost Note",
+    href: "https://www.ghostnoteagency.com",
+    role: "growth",
+    body: "I bring in new business. That means meeting people, figuring out what they actually need, and turning good conversations into good clients.",
   },
   {
-    name: "Workflow & systems design",
-    body: "Project management setups, intake processes, SOPs, and the tooling behind them, built to fit how your team actually works.",
+    name: "Integral",
+    role: "operations",
+    body: "I keep the machine running. Timelines, handoffs, who's doing what, and making sure the work ships without everyone losing their minds.",
   },
   {
-    name: "Fractional operator",
-    body: "Ongoing, embedded support for founders and agency leaders who need an operator in the room without a full-time hire.",
+    name: "Fredo's House",
+    role: "my own thing",
+    body: "Where I write, try out ideas, and sometimes help founders and agencies get their ops in order.",
   },
-];
-
-const experience = [
-  { role: "Director of Growth", org: "Ghost Note Agency", when: "Current" },
-  { role: "Founder", org: "Fredo's House", when: "Current" },
-  { role: "Creative Project Manager", org: "Fredo's House", when: "Earlier" },
 ];
 ---
 
-<Base title="Work" description="Fredo's House helps entrepreneurs and marketing agencies run better.">
-  <h1>Fredo's House</h1>
+<Base title="Work" description="Growth at Ghost Note, ops at Integral, and Fredo's House on the side.">
+  <h1>What I do</h1>
   <p class="lede">
-    An operations practice for entrepreneurs and marketing agencies. We
-    make the work behind the work run better.
+    Two jobs, one side thing, and usually 10 to 20 accounts going at once.
   </p>
 
-  <p class="label">What I do</p>
   {
-    services.map((s) => (
+    jobs.map((j) => (
       <>
-        <h3>{s.name}</h3>
-        <p>{s.body}</p>
+        <p class="label">{j.role}</p>
+        <h3>{j.href ? <a href={j.href}>{j.name}</a> : j.name}</h3>
+        <p>{j.body}</p>
       </>
     ))
   }
 
-  <p class="label">Experience</p>
-  <ul class="rows">
-    {
-      experience.map((e) => (
-        <li>
-          <span>
-            {e.role}, <span class="muted">{e.org}</span>
-          </span>
-          <span class="meta">{e.when}</span>
-        </li>
-      ))
-    }
-  </ul>
-
-  <p class="label">Work with me</p>
+  <p class="label">want help?</p>
   <p>
-    Tell me a little about your team and what's getting in the way:{" "}
-    <a href={`mailto:${SITE.email}?subject=Working%20together`}>{SITE.email}</a>.
+    If your team is buried and needs someone to sort out how the work gets
+    done, email me:{" "}
+    <a href={`mailto:${SITE.email}?subject=Hey%20Fredo`}>{SITE.email}</a>.
   </p>
 </Base>
+
+<style>
+  h3 {
+    margin-top: 0;
+  }
+  h3 a {
+    text-decoration: none;
+  }
+</style>

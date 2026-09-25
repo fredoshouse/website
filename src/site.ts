@@ -4,10 +4,10 @@ export const SITE = {
   nickname: "Fredo",
   title: "Alfred “Fredo” Adarkwah",
   description:
-    "Operator, founder of Fredo's House. Writing on operations, agencies, and building things that run well.",
+    "Hey, I'm Fredo. Growth at Ghost Note, ops at Integral, and trying to have some fun in Seattle along the way.",
   email: "alfred@fredoshouse.com",
-  location: "Kirkland, WA",
-  tagline: "Founder of Fredo's House",
+  location: "Seattle",
+  tagline: "Growth at Ghost Note. Ops at Integral.",
 };
 
 export const NAV = [
@@ -26,11 +26,11 @@ export const ELSEWHERE = [
 export const SERIES: Record<string, { name: string; blurb: string }> = {
   letters: {
     name: "Fredo's Letters",
-    blurb: "Notes on operating, agencies, and the work behind the work.",
+    blurb: "Thoughts on work, agencies, and keeping it all together.",
   },
   lessons: {
     name: "Fredo's Lessons",
-    blurb: "Practical primers on project management and operations.",
+    blurb: "The stuff I wish someone had told me earlier about running projects.",
   },
   notes: {
     name: "Notes",

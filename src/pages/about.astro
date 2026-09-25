@@ -4,27 +4,28 @@ import { SITE, ELSEWHERE } from "../site";
 ---
 
 <Base title="About">
-  <h1>About</h1>
+  <h1>About me</h1>
   <div class="prose">
     <p>
-      I'm Alfred Adarkwah, though most people call me Fredo. I'm an
-      operations architect: I design the workflows, systems, and habits that
-      help small teams do big work.
+      I'm Alfred Adarkwah. Everybody calls me Fredo.
     </p>
     <p>
-      I started out managing creative projects and learned quickly that
-      I'm not really a project manager. I'm an operator. I care less about
-      the Gantt chart and more about whether the team is set up to win.
-      Fredo's House grew out of that.
+      I do growth at Ghost Note and operations at Integral. Most weeks that
+      means juggling 10 to 20 accounts, a lot of calls, and a to-do list that
+      never really ends.
     </p>
     <p>
-      These days I'm Director of Growth at Ghost Note Agency, and I work
-      with founders and agencies through Fredo's House. I'm based in
-      {SITE.location}.
+      Why so much? Probably the African in me. Working hard was the only mode I
+      was taught, and I haven't figured out how to turn it off yet. I'm not
+      sure I want to.
+    </p>
+    <p>
+      When I'm not working I'm trying to keep my life afloat and have some fun
+      in {SITE.location}. Some weeks go better than others.
     </p>
   </div>
 
-  <p class="label">Elsewhere</p>
+  <p class="label">find me</p>
   <ul class="rows">
     {ELSEWHERE.map((l) => <li><a href={l.href}>{l.label}</a><span class="meta">↗</span></li>)}
   </ul>
