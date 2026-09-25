@@ -16,6 +16,7 @@ const key = import.meta.env.PUBLIC_POSTHOG_KEY;
         capture_pageview: true,
         capture_pageleave: true,
       });
+      (window as any).posthog = posthog;
 
       // Named events for the things that matter most. Any element with
       // data-track="event name" reports a click under that name, plus its

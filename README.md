@@ -34,7 +34,13 @@ These are fetched when the site builds, so set up a daily scheduled rebuild on y
 
 ### Timeline
 
-The sliding "path so far" timeline on the home page runs from 1996 to now and reads from `src/timeline.ts`. Add a year to `STOPS` with an emoji, a title and an optional note; years you skip show as small ticks.
+The vertical "path so far" timeline at `/timeline` runs from 1996 to now and reads from `src/timeline.ts`. Add a year to `STOPS` with an emoji, a title and an optional note; years you skip show as small ticks.
+
+### Corner UI
+
+- Top left: the current book (`reading` in `src/now.ts`).
+- Top right: light/dark toggle and the **+** menu. Menu items are `LIFE_PAGES` in `src/site.ts`.
+- Bottom: the song on repeat (`listening` in `src/now.ts`). Add a Spotify link as `href`, otherwise it opens a Spotify search.
 
 ### Newsletter (beehiiv)
 
@@ -43,6 +49,15 @@ Fill in `NEWSLETTER` in `src/site.ts`:
 - `url`: your beehiiv publication address. Turns on a Subscribe button.
 - `embedId`: the id from a beehiiv subscribe form embed. Swaps the button for beehiiv's inline email box.
 - `rss`: your beehiiv RSS feed URL. Letters show up on the Writing page and home page on every build, linking out to beehiiv. If a letter also exists as a Markdown post here, the local copy wins.
+
+### Ask Fredo (AI)
+
+`/ask` is a chat where visitors ask about Fredo's work and writing. Answers stream from `/api/ask` (a Vercel function) using Claude, in Fredo's voice, grounded in:
+
+- `src/knowledge/fredo.md`: the client-facing bio and facts. Edit this to change what it knows.
+- Every letter in `src/content/writing/`: new letters are picked up automatically.
+
+It needs `ANTHROPIC_API_KEY` set in Vercel (Project → Settings → Environment Variables). Without it, the page shows a friendly "email me instead" note. Questions are logged to PostHog as `ask question` events, so you can see what people ask. There's a light per-visitor rate limit (20 questions per 10 minutes).
 
 ### Analytics
 
@@ -61,7 +76,7 @@ Every link to beehiiv carries `utm_source=alfredadarkwah.com`, so beehiiv's own 
 
 ### Adding a post
 
-Letters live on beehiiv and are listed from `src/letters.ts` (plus the live RSS feed, if set). For something that lives only on this site, create a Markdown file in `src/content/writing/`. The filename becomes the URL (`/writing/<filename>`).
+Every letter lives on this site as a Markdown file in `src/content/writing/` (imported from beehiiv, with `originalUrl` pointing back). To add one, create a new file there, or ask Claude to import the latest from beehiiv. The filename becomes the URL (`/writing/<filename>`).
 
 ```md
 ---

@@ -1,0 +1,273 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../site";
+
+const starters = [
+  "What do you actually do at Ghost Note and Integral?",
+  "How do you think about operations vs. projects?",
+  "What's a letter I should start with?",
+  "Could you help my agency get organized?",
+];
+---
+
+<Base title="Ask Fredo" description="Ask me anything about my work, my writing, or whether I can help. AI-assisted, trained on my letters.">
+  <h1>Ask Fredo</h1>
+  <p class="lede">
+    Curious about my work, my letters, or whether I could help? Ask away.
+  </p>
+  <p class="muted fine">
+    This is an AI version of me, built on my writing. It's pretty good, but for
+    anything real, email me at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    I read everything.
+  </p>
+
+  <div class="chat" id="chat" aria-live="polite"></div>
+
+  <div class="starters" id="starters">
+    {starters.map((q) => <button type="button" class="starter">{q}</button>)}
+  </div>
+
+  <form class="ask" id="ask-form">
+    <label for="ask-input" class="visually-hidden">Your question</label>
+    <textarea id="ask-input" rows="1" maxlength="2000" placeholder="Ask me something…" required></textarea>
+    <button type="submit" id="ask-send" aria-label="Send">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+    </button>
+  </form>
+</Base>
+
+<script>
+  type Turn = { role: "user" | "assistant"; content: string };
+  const history: Turn[] = [];
+  const chat = document.getElementById("chat")!;
+  const form = document.getElementById("ask-form") as HTMLFormElement;
+  const input = document.getElementById("ask-input") as HTMLTextAreaElement;
+  const send = document.getElementById("ask-send") as HTMLButtonElement;
+  const starters = document.getElementById("starters")!;
+
+  // Tiny, safe markdown: escape everything, then allow **bold**, *italic*,
+  // [links](/local-or-https) and line breaks.
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  function render(md: string) {
+    return esc(md)
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*(?!\s)(.+?)\*/g, "$1<em>$2</em>")
+      .replace(/\[([^\]]+)\]\(((?:\/|https:\/\/)[^\s)]*)\)/g, '<a href="$2">$1</a>')
+      .split(/\n{2,}/)
+      .map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`)
+      .join("");
+  }
+
+  function bubble(role: Turn["role"], html = "") {
+    const el = document.createElement("div");
+    el.className = `msg ${role}`;
+    el.innerHTML = html;
+    chat.appendChild(el);
+    el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    return el;
+  }
+
+  async function ask(question: string) {
+    question = question.trim();
+    if (!question) return;
+    starters.hidden = true;
+    history.push({ role: "user", content: question });
+    bubble("user", render(question));
+    const out = bubble("assistant", '<span class="typing"><i></i><i></i><i></i></span>');
+    input.value = "";
+    send.disabled = true;
+    (window as any).posthog?.capture?.("ask question", { question });
+
+    let answer = "";
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: history }),
+      });
+      if (!res.body) throw new Error("no body");
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        answer += decoder.decode(value, { stream: true });
+        out.innerHTML = render(answer);
+      }
+      if (!res.ok) history.pop(); // don't keep failed turns in the conversation
+      else history.push({ role: "assistant", content: answer });
+    } catch {
+      history.pop();
+      out.innerHTML = render("Couldn't reach me just now. Try again, or email alfred@fredoshouse.com.");
+    } finally {
+      send.disabled = false;
+      input.focus();
+    }
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    ask(input.value);
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  input.addEventListener("input", () => {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, 160)}px`;
+  });
+  starters.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => ask(b.textContent ?? "")));
+</script>
+
+<style is:global>
+  /* the chat box sits at the bottom on phones; keep the song pill out of its way */
+  @media (max-width: 640px) {
+    .now-playing {
+      display: none !important;
+    }
+  }
+</style>
+
+<style>
+  .fine {
+    font-size: 0.9rem;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 2rem 0 1rem;
+  }
+  .chat:empty {
+    display: none;
+  }
+  .msg {
+    max-width: 88%;
+    padding: 0.7rem 1rem;
+    border-radius: 18px;
+    line-height: 1.55;
+  }
+  .msg :global(p) {
+    margin: 0 0 0.6rem;
+  }
+  .msg :global(p:last-child) {
+    margin-bottom: 0;
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--fg);
+    color: var(--bg);
+    border-bottom-right-radius: 6px;
+  }
+  .msg.assistant {
+    align-self: flex-start;
+    background: var(--card);
+    border: 1px solid var(--faint);
+    border-bottom-left-radius: 6px;
+  }
+  .typing {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .typing i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: blink 1.2s infinite;
+  }
+  .typing i:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .typing i:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
+  .starters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0 1rem;
+  }
+  .starter {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--faint);
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    text-align: left;
+  }
+  .starter:hover,
+  .starter:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
+  .ask {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+    border: 1px solid var(--faint);
+    border-radius: 24px;
+    background: var(--card);
+  }
+  .ask:focus-within {
+    border-color: var(--accent);
+  }
+  .ask textarea {
+    flex: 1;
+    resize: none;
+    border: 0;
+    background: transparent;
+    color: var(--fg);
+    font: inherit;
+    padding: 0.5rem 0;
+    outline: none;
+    max-height: 160px;
+  }
+  .ask button {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: none;
+    border: 0;
+    border-radius: 50%;
+    background: var(--fg);
+    color: var(--bg);
+    cursor: pointer;
+  }
+  .ask button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .ask button:hover:not(:disabled) {
+    background: var(--accent);
+  }
+  .ask svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

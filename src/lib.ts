@@ -83,7 +83,7 @@ function merge(
   return { ...live, take: same(live.title, manual.title) ? take : undefined };
 }
 
-let cached: Promise<ReturnType<typeof build>> | undefined;
+let cached: ReturnType<typeof build> | undefined;
 async function build() {
   const [book, music] = await Promise.all([goodreadsCurrentlyReading(), lastfmRecent()]);
   return {
