@@ -13,7 +13,12 @@ const { posts } = Astro.props;
   {
     posts.map((post) => (
       <li>
-        <a href={post.href}>
+        <a
+          href={post.href}
+          data-track="writing click"
+          data-track-title={post.title}
+          data-track-series={post.series}
+        >
           {post.title}
           {post.external && <span class="ext" aria-label="(opens on beehiiv)">↗</span>}
         </a>

@@ -26,15 +26,15 @@ export const ELSEWHERE = [
 export const SERIES: Record<string, { name: string; blurb: string }> = {
   letters: {
     name: "Fredo's Letters",
-    blurb: "Thinking out loud about work, growth, and agency life.",
+    blurb: "Thinking out loud about work, growth, and life.",
   },
   lessons: {
     name: "Fredo's Lessons",
     blurb: "The stuff I wish someone had told me earlier about running projects.",
   },
   notes: {
-    name: "Notes",
-    blurb: "Everything else.",
+    name: "Case studies & templates",
+    blurb: "Things I've built and how.",
   },
 };
 
@@ -46,7 +46,11 @@ export const SERIES: Record<string, { name: string; blurb: string }> = {
 //   page automatically each time the site builds.
 export const NEWSLETTER = {
   name: "Fredo's Letters",
-  url: "",
+  url: "https://fredoshouse.beehiiv.com",
   embedId: "",
   rss: "",
 };
+
+// Added to every link that goes to beehiiv, so beehiiv's own analytics show
+// which reads and subscribers came from this site.
+export const BEEHIIV_UTM = "utm_source=alfredadarkwah.com&utm_medium=website";

@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { SITE, NAV, ELSEWHERE } from "../site";
+import Analytics from "../components/Analytics.astro";
 
 interface Props {
   title?: string;
@@ -62,9 +63,10 @@ const isActive = (href: string) =>
     <footer class="wrap site-footer">
       <span>© {new Date().getFullYear()} {SITE.name} · Fredo's House</span>
       <span class="links">
-        {ELSEWHERE.map((l) => <a href={l.href}>{l.label}</a>)}
+        {ELSEWHERE.map((l) => <a href={l.href} data-track="elsewhere click" data-track-label={l.label}>{l.label}</a>)}
       </span>
     </footer>
+    <Analytics />
   </body>
 </html>
 

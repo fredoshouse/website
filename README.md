@@ -44,9 +44,24 @@ Fill in `NEWSLETTER` in `src/site.ts`:
 - `embedId`: the id from a beehiiv subscribe form embed. Swaps the button for beehiiv's inline email box.
 - `rss`: your beehiiv RSS feed URL. Letters show up on the Writing page and home page on every build, linking out to beehiiv. If a letter also exists as a Markdown post here, the local copy wins.
 
+### Analytics
+
+Site analytics run on [PostHog](https://posthog.com) and only load when `PUBLIC_POSTHOG_KEY` is set (see `.env.example`). It records page views, time on page, and every click; turn on Session Replay in PostHog to watch real visits. Named events:
+
+| Event | When |
+| --- | --- |
+| `writing click` | Someone opens a letter or lesson (with title and series) |
+| `subscribe click` | Someone hits Subscribe (with the page they were on) |
+| `email click` | Someone clicks your email address |
+| `elsewhere click` | Someone clicks LinkedIn / Email / RSS in the footer |
+
+Add `data-track="some name"` to any link or button to track it too.
+
+Every link to beehiiv carries `utm_source=alfredadarkwah.com`, so beehiiv's own analytics show which reads and new subscribers came from the site.
+
 ### Adding a post
 
-Create a Markdown file in `src/content/writing/`. The filename becomes the URL (`/writing/<filename>`).
+Letters live on beehiiv and are listed from `src/letters.ts` (plus the live RSS feed, if set). For something that lives only on this site, create a Markdown file in `src/content/writing/`. The filename becomes the URL (`/writing/<filename>`).
 
 ```md
 ---

@@ -1,5 +1,5 @@
 ---
-import { NEWSLETTER } from "../site";
+import { NEWSLETTER, BEEHIIV_UTM } from "../site";
 
 const { embedId, url, name } = NEWSLETTER;
 const show = Boolean(embedId || url);
@@ -9,8 +9,8 @@ const show = Boolean(embedId || url);
   show && (
     <div class="subscribe">
       <p class="pitch">
-        Get <strong>{name}</strong> in your inbox. What I’m learning, what I’m
-        thinking about, no fluff.
+        Get <strong>{name}</strong> in your inbox. Notes on work, growth, and
+        becoming a better operator.
       </p>
       {embedId ? (
         <iframe
@@ -21,7 +21,12 @@ const show = Boolean(embedId || url);
           scrolling="no"
         />
       ) : (
-        <a class="button" href={`${url.replace(/\/$/, "")}/subscribe`}>
+        <a
+          class="button"
+          href={`${url.replace(/\/$/, "")}/subscribe?${BEEHIIV_UTM}&utm_campaign=subscribe`}
+          data-track="subscribe click"
+          data-track-where={Astro.url.pathname}
+        >
           Subscribe →
         </a>
       )}

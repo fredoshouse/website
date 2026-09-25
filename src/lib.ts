@@ -1,6 +1,7 @@
 import { getCollection } from "astro:content";
-import { NEWSLETTER } from "./site";
+import { NEWSLETTER, BEEHIIV_UTM } from "./site";
 import { newsletterPosts } from "./integrations";
+import { BEEHIIV_POSTS } from "./letters";
 
 export async function getPosts() {
   const posts = await getCollection("writing", ({ data }) => !data.draft);
@@ -31,10 +32,30 @@ export function getAllWriting() {
       series: p.data.series,
       external: false,
     }));
-    const seen = new Set(items.map((i) => i.title.trim().toLowerCase()));
+    const base = NEWSLETTER.url.replace(/\/$/, "");
+    for (const p of BEEHIIV_POSTS) {
+      items.push({
+        title: p.title,
+        date: new Date(p.date),
+        href: `${base}/p/${p.slug}?${BEEHIIV_UTM}&utm_campaign=writing`,
+        series: p.series,
+        external: true,
+      });
+    }
+    // Live feed adds anything newer than the snapshot. Match on URL since
+    // snapshot titles are cleaned up.
+    const bare = (u: string) => u.split("?")[0].replace(/\/$/, "");
+    const seen = new Set(items.map((i) => bare(i.href)));
     for (const l of letters) {
-      if (seen.has(l.title.trim().toLowerCase())) continue;
-      items.push({ title: l.title, date: l.date, href: l.href, series: "letters", external: true });
+      if (seen.has(bare(l.href))) continue;
+      const sep = l.href.includes("?") ? "&" : "?";
+      items.push({
+        title: l.title,
+        date: l.date,
+        href: `${l.href}${sep}${BEEHIIV_UTM}&utm_campaign=writing`,
+        series: "letters",
+        external: true,
+      });
     }
     return items.sort((a, b) => b.date.valueOf() - a.date.valueOf());
   })());

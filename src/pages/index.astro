@@ -71,7 +71,7 @@ const recent = (await getAllWriting()).slice(0, 5);
     If you’re building something, running an agency, trying to grow a business,
     or just want to grab a coffee and talk about what’s going on:
   </p>
-  <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+  <p><a href={`mailto:${SITE.email}`} data-track="email click">{SITE.email}</a></p>
   <p>I read everything.</p>
 </Base>
 

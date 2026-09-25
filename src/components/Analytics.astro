@@ -1,0 +1,37 @@
+---
+// PostHog analytics: page views, clicks, scroll depth, and (if turned on in
+// PostHog) session replays. Only loads when PUBLIC_POSTHOG_KEY is set, so
+// local dev and preview builds without the key send nothing.
+const key = import.meta.env.PUBLIC_POSTHOG_KEY;
+---
+
+{
+  key && (
+    <script>
+      import posthog from "posthog-js";
+
+      posthog.init(import.meta.env.PUBLIC_POSTHOG_KEY, {
+        api_host: import.meta.env.PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
+        person_profiles: "identified_only",
+        capture_pageview: true,
+        capture_pageleave: true,
+      });
+
+      // Named events for the things that matter most. Any element with
+      // data-track="event name" reports a click under that name, plus its
+      // data-track-* attributes as properties.
+      document.addEventListener("click", (e) => {
+        const el = (e.target as HTMLElement).closest<HTMLElement>("[data-track]");
+        if (!el) return;
+        const props: Record<string, string> = {};
+        for (const [k, v] of Object.entries(el.dataset)) {
+          if (k.startsWith("track") && k !== "track" && v) {
+            props[k.slice(5).toLowerCase()] = v;
+          }
+        }
+        if (el instanceof HTMLAnchorElement) props.href = el.href;
+        posthog.capture(el.dataset.track!, props);
+      });
+    </script>
+  )
+}
