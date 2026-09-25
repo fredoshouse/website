@@ -1,0 +1,60 @@
+---
+import { NEWSLETTER } from "../site";
+
+const { embedId, url, name } = NEWSLETTER;
+const show = Boolean(embedId || url);
+---
+
+{
+  show && (
+    <div class="subscribe">
+      <p class="pitch">
+        Get <strong>{name}</strong> in your inbox. What I’m learning, what I’m
+        thinking about, no fluff.
+      </p>
+      {embedId ? (
+        <iframe
+          src={`https://embeds.beehiiv.com/${embedId}?slim=true`}
+          title={`Subscribe to ${name}`}
+          height="52"
+          loading="lazy"
+          scrolling="no"
+        />
+      ) : (
+        <a class="button" href={`${url.replace(/\/$/, "")}/subscribe`}>
+          Subscribe →
+        </a>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .subscribe {
+    margin: 2rem 0;
+    padding: 1.25rem;
+    border: 1px solid var(--faint);
+    border-radius: 10px;
+  }
+  .pitch {
+    margin: 0 0 0.75rem;
+  }
+  iframe {
+    width: 100%;
+    border: 0;
+    background: transparent;
+  }
+  .button {
+    display: inline-block;
+    font-family: var(--sans);
+    text-decoration: none;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+  }
+  .button:hover {
+    color: var(--bg);
+    background: var(--accent);
+  }
+</style>

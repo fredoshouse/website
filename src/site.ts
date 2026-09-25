@@ -37,3 +37,16 @@ export const SERIES: Record<string, { name: string; blurb: string }> = {
     blurb: "Everything else.",
   },
 };
+
+// beehiiv. Fill these in once the newsletter is connected:
+// - url: your publication's address, e.g. "https://fredosletters.beehiiv.com"
+// - embedId: from beehiiv > Grow > Subscribe Forms > (form) > Embed; the id in
+//   the iframe src "https://embeds.beehiiv.com/<embedId>"
+// - rss: from beehiiv > Settings > RSS Feed. Letters show up on the Writing
+//   page automatically each time the site builds.
+export const NEWSLETTER = {
+  name: "Fredo's Letters",
+  url: "",
+  embedId: "",
+  rss: "",
+};

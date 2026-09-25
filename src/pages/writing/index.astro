@@ -1,12 +1,13 @@
 ---
 import Base from "../../layouts/Base.astro";
 import PostList from "../../components/PostList.astro";
-import { getPosts } from "../../lib";
-import { SERIES } from "../../site";
+import { getAllWriting } from "../../lib";
+import Subscribe from "../../components/Subscribe.astro";
+import { SERIES, NEWSLETTER } from "../../site";
 
-const posts = await getPosts();
+const posts = await getAllWriting();
 const groups = Object.entries(SERIES)
-  .map(([key, meta]) => ({ ...meta, posts: posts.filter((p) => p.data.series === key) }))
+  .map(([key, meta]) => ({ ...meta, posts: posts.filter((p) => p.series === key) }))
   .filter((g) => g.posts.length > 0);
 ---
 
@@ -15,7 +16,11 @@ const groups = Object.entries(SERIES)
   <p class="lede">
     Stuff I've learned doing growth and ops, written down so I don't forget it.
   </p>
-  <p class="muted">Want new ones? There's an <a href="/rss.xml">RSS feed</a>.</p>
+  <Subscribe />
+  <p class="muted">
+    {NEWSLETTER.url || NEWSLETTER.embedId ? "Or grab the " : "Want new ones? There's an "}
+    <a href="/rss.xml">RSS feed</a>.
+  </p>
 
   {
     groups.map((g) => (

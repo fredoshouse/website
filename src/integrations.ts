@@ -75,3 +75,44 @@ export async function lastfmRecent(): Promise<LiveItem | null> {
     return null;
   }
 }
+
+export interface FeedPost {
+  title: string;
+  href: string;
+  date: Date;
+  description?: string;
+}
+
+const decode = (s: string) =>
+  s
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/g, "'")
+    .trim();
+
+export function parseRssPosts(xml: string): FeedPost[] {
+  const posts: FeedPost[] = [];
+  for (const [, item] of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+    const title = tag(item, "title");
+    const href = tag(item, "link");
+    const date = new Date(tag(item, "pubDate") ?? "");
+    if (!title || !href || Number.isNaN(date.valueOf())) continue;
+    const description = tag(item, "description");
+    posts.push({
+      title: decode(title),
+      href,
+      date,
+      description: description ? decode(description).slice(0, 200) : undefined,
+    });
+  }
+  return posts;
+}
+
+export async function newsletterPosts(rssUrl: string): Promise<FeedPost[]> {
+  if (!rssUrl) return [];
+  const xml = await fetchText(rssUrl);
+  return xml ? parseRssPosts(xml) : [];
+}

@@ -32,6 +32,18 @@ Optional auto-updates, set as environment variables on your host:
 
 These are fetched when the site builds, so set up a daily scheduled rebuild on your host to keep them fresh. If anything fails, the site just falls back to `src/now.ts`.
 
+### Timeline
+
+The sliding "path so far" timeline on the home page reads from `src/timeline.ts`. Oldest first; the last entry gets the highlighted "now" dot.
+
+### Newsletter (beehiiv)
+
+Fill in `NEWSLETTER` in `src/site.ts`:
+
+- `url`: your beehiiv publication address. Turns on a Subscribe button.
+- `embedId`: the id from a beehiiv subscribe form embed. Swaps the button for beehiiv's inline email box.
+- `rss`: your beehiiv RSS feed URL. Letters show up on the Writing page and home page on every build, linking out to beehiiv. If a letter also exists as a Markdown post here, the local copy wins.
+
 ### Adding a post
 
 Create a Markdown file in `src/content/writing/`. The filename becomes the URL (`/writing/<filename>`).
@@ -48,6 +60,10 @@ draft: false           # true hides it from the site
 
 Your writing here.
 ```
+
+## Staging
+
+Connect the repo to [Vercel](https://vercel.com/new) (Import Git Repository → pick `fredoshouse/website`; it detects Astro on its own). Every branch push then gets its own preview URL, and `main` becomes production.
 
 ## Domains
 

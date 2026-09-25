@@ -1,9 +1,9 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { WritingItem } from "../lib";
 import { formatDate } from "../lib";
 
 interface Props {
-  posts: CollectionEntry<"writing">[];
+  posts: WritingItem[];
 }
 
 const { posts } = Astro.props;
@@ -13,11 +13,22 @@ const { posts } = Astro.props;
   {
     posts.map((post) => (
       <li>
-        <a href={`/writing/${post.id}`}>{post.data.title}</a>
-        <time class="meta" datetime={post.data.date.toISOString()}>
-          {formatDate(post.data.date)}
+        <a href={post.href}>
+          {post.title}
+          {post.external && <span class="ext" aria-label="(opens on beehiiv)">↗</span>}
+        </a>
+        <time class="meta" datetime={post.date.toISOString()}>
+          {formatDate(post.date)}
         </time>
       </li>
     ))
   }
 </ul>
+
+<style>
+  .ext {
+    margin-left: 0.3em;
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+</style>
