@@ -1,0 +1,113 @@
+---
+import "../styles/global.css";
+import { SITE, NAV, ELSEWHERE } from "../site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = SITE.description } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.name}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#dce7f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1628" media="(prefers-color-scheme: dark)" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="wrap site-header">
+      <a href="/" class="home">{SITE.title}</a>
+      <nav aria-label="Main">
+        {
+          NAV.filter((n) => n.href !== "/").map((n) => (
+            <a href={n.href} aria-current={isActive(n.href) ? "page" : undefined}>
+              {n.label}
+            </a>
+          ))
+        }
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <slot />
+    </main>
+
+    <footer class="wrap site-footer">
+      <span>© {new Date().getFullYear()} {SITE.name} · Fredo's House</span>
+      <span class="links">
+        {ELSEWHERE.map((l) => <a href={l.href}>{l.label}</a>)}
+      </span>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+  .home {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.95rem;
+  }
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+  }
+  nav a[aria-current="page"] {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+  .site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    justify-content: space-between;
+    margin-top: 6rem;
+    padding-top: 1.5rem;
+    padding-bottom: 3rem;
+    border-top: 1px solid var(--faint);
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .links {
+    display: flex;
+    gap: 1rem;
+  }
+</style>

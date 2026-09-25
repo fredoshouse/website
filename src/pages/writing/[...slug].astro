@@ -1,0 +1,59 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { getPosts, formatDate } from "../../lib";
+import { SERIES } from "../../site";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <article>
+    <p class="muted meta-line">
+      <a href="/writing">{SERIES[post.data.series].name}</a>{" · "}
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, "long")}</time>
+    </p>
+    <h1>{post.data.title}</h1>
+    <div class="prose">
+      <Content />
+    </div>
+    {
+      post.data.originalUrl && (
+        <p class="muted">
+          Originally published on <a href={post.data.originalUrl}>LinkedIn</a>.
+        </p>
+      )
+    }
+  </article>
+
+  <hr />
+  <nav class="pager" aria-label="More writing">
+    {newer ? <a href={`/writing/${newer.id}`}>← {newer.data.title}</a> : <span />}
+    {older && <a href={`/writing/${older.id}`}>{older.data.title} →</a>}
+  </nav>
+</Base>
+
+<style>
+  .meta-line {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+  }
+  .pager a {
+    text-decoration: none;
+  }
+</style>

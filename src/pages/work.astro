@@ -1,0 +1,63 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../site";
+
+const services = [
+  {
+    name: "Operations audits",
+    body: "A clear-eyed look at how work moves through your team today: where it stalls, where it's duplicated, and what to fix first.",
+  },
+  {
+    name: "Workflow & systems design",
+    body: "Project management setups, intake processes, SOPs, and the tooling behind them, built to fit how your team actually works.",
+  },
+  {
+    name: "Fractional operator",
+    body: "Ongoing, embedded support for founders and agency leaders who need an operator in the room without a full-time hire.",
+  },
+];
+
+const experience = [
+  { role: "Director of Growth", org: "Ghost Note Agency", when: "Current" },
+  { role: "Founder", org: "Fredo's House", when: "Current" },
+  { role: "Creative Project Manager", org: "Fredo's House", when: "Earlier" },
+];
+---
+
+<Base title="Work" description="Fredo's House helps entrepreneurs and marketing agencies run better.">
+  <h1>Fredo's House</h1>
+  <p class="lede">
+    An operations practice for entrepreneurs and marketing agencies. We
+    make the work behind the work run better.
+  </p>
+
+  <p class="label">What I do</p>
+  {
+    services.map((s) => (
+      <>
+        <h3>{s.name}</h3>
+        <p>{s.body}</p>
+      </>
+    ))
+  }
+
+  <p class="label">Experience</p>
+  <ul class="rows">
+    {
+      experience.map((e) => (
+        <li>
+          <span>
+            {e.role}, <span class="muted">{e.org}</span>
+          </span>
+          <span class="meta">{e.when}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="label">Work with me</p>
+  <p>
+    Tell me a little about your team and what's getting in the way:{" "}
+    <a href={`mailto:${SITE.email}?subject=Working%20together`}>{SITE.email}</a>.
+  </p>
+</Base>

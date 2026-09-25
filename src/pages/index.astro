@@ -1,0 +1,52 @@
+---
+import Base from "../layouts/Base.astro";
+import PostList from "../components/PostList.astro";
+import { getPosts } from "../lib";
+import { SITE } from "../site";
+
+const recent = (await getPosts()).slice(0, 5);
+---
+
+<Base>
+  <h1>Hi, I'm Fredo.</h1>
+  <p class="lede">
+    I'm an operator. I build the systems, workflows, and teams that let
+    entrepreneurs and agencies do their best work without drowning in it.
+  </p>
+  <p>
+    I run <a href="/work">Fredo's House</a>, where I help founders and
+    marketing agencies fix how work actually gets done. I'm also Director of
+    Growth at <a href="https://www.ghostnoteagency.com">Ghost Note Agency</a>.
+    I live in {SITE.location}.
+  </p>
+  <p>
+    I write <a href="/writing">letters and lessons</a> about operations,
+    agency life, and the unglamorous parts of building a business.
+  </p>
+
+  <p class="label">Now</p>
+  <ul class="rows">
+    <li><span>Director of Growth, Ghost Note Agency</span><span class="meta">Current</span></li>
+    <li><span>Founder, Fredo's House</span><span class="meta">Current</span></li>
+    <li><span>Writing Fredo's Letters</span><span class="meta">Ongoing</span></li>
+  </ul>
+
+  {
+    recent.length > 0 && (
+      <>
+        <p class="label">Recent writing</p>
+        <PostList posts={recent} />
+        <p class="muted" style="margin-top:1rem">
+          <a href="/writing">All writing →</a>
+        </p>
+      </>
+    )
+  }
+
+  <p class="label">Say hello</p>
+  <p>
+    The best way to reach me is <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+    If you run a team or an agency and the work feels heavier than it should,
+    I'd love to hear about it.
+  </p>
+</Base>

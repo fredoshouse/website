@@ -1,0 +1,29 @@
+---
+import Base from "../../layouts/Base.astro";
+import PostList from "../../components/PostList.astro";
+import { getPosts } from "../../lib";
+import { SERIES } from "../../site";
+
+const posts = await getPosts();
+const groups = Object.entries(SERIES)
+  .map(([key, meta]) => ({ ...meta, posts: posts.filter((p) => p.data.series === key) }))
+  .filter((g) => g.posts.length > 0);
+---
+
+<Base title="Writing" description="Letters and lessons on operations, agencies, and building a business.">
+  <h1>Writing</h1>
+  <p class="lede">
+    Letters and lessons on operations, agencies, and building a business.
+  </p>
+  <p class="muted">Subscribe via <a href="/rss.xml">RSS</a>.</p>
+
+  {
+    groups.map((g) => (
+      <section>
+        <p class="label">{g.name}</p>
+        <p class="muted">{g.blurb}</p>
+        <PostList posts={g.posts} />
+      </section>
+    ))
+  }
+</Base>
