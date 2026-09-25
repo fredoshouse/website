@@ -1,10 +1,12 @@
 ---
-import { TIMELINE } from "../timeline";
+import { TIMELINE, TIMELINE_START } from "../timeline";
 ---
 
 <section class="timeline" aria-labelledby="timeline-label">
   <div class="head">
-    <p class="label" id="timeline-label">the path so far</p>
+    <p class="label" id="timeline-label">
+      the path so far <span class="span">· {TIMELINE_START} → now</span>
+    </p>
     <div class="arrows">
       <button type="button" data-dir="-1" aria-label="Earlier">←</button>
       <button type="button" data-dir="1" aria-label="Later">→</button>
@@ -56,6 +58,10 @@ import { TIMELINE } from "../timeline";
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+  }
+  .span {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
   }
   .arrows {
     display: flex;

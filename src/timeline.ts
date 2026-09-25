@@ -9,7 +9,14 @@ export interface Stop {
   note?: string; // one line, in your voice
 }
 
+export const TIMELINE_START = 1996;
+
 export const TIMELINE: Stop[] = [
+  {
+    when: "1996",
+    title: "Where it starts",
+    note: "TODO: one line about 1996.",
+  },
   {
     when: "TODO",
     title: "Creative project manager",
