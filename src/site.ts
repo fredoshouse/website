@@ -7,13 +7,14 @@ export const SITE = {
     "Operator, founder of Fredo's House. Writing on operations, agencies, and building things that run well.",
   email: "alfred@fredoshouse.com",
   location: "Kirkland, WA",
+  tagline: "Founder of Fredo's House",
 };
 
 export const NAV = [
-  { href: "/", label: "Home" },
-  { href: "/writing", label: "Writing" },
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
+  { href: "/writing", label: "writing" },
+  { href: "/work", label: "work" },
+  { href: "/about", label: "about" },
+  { href: "mailto:alfred@fredoshouse.com", label: "contact" },
 ];
 
 export const ELSEWHERE = [

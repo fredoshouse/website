@@ -20,8 +20,8 @@ const isActive = (href: string) =>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#dce7f5" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b1628" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#eef2f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161b24" media="(prefers-color-scheme: dark)" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -34,16 +34,19 @@ const isActive = (href: string) =>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500&family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital@0;1&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
-    <header class="wrap site-header">
-      <a href="/" class="home">{SITE.title}</a>
-      <nav aria-label="Main">
+    <header class="site-header">
+      <a href="/" class="home">
+        <span class="name">{SITE.name}</span>
+        <span class="tagline">{SITE.tagline}</span>
+      </a>
+      <nav aria-label="Main" class="wrap">
         {
-          NAV.filter((n) => n.href !== "/").map((n) => (
+          NAV.map((n) => (
             <a href={n.href} aria-current={isActive(n.href) ? "page" : undefined}>
               {n.label}
             </a>
@@ -67,30 +70,52 @@ const isActive = (href: string) =>
 
 <style>
   .site-header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-top: 2.5rem;
-    padding-bottom: 4rem;
+    text-align: center;
+    padding-top: 3.5rem;
+    margin-bottom: 3.5rem;
   }
   .home {
-    font-family: var(--display);
-    font-size: 1.15rem;
+    display: inline-block;
     text-decoration: none;
+    padding: 0 1.25rem 1.5rem;
+  }
+  .home:hover {
+    color: inherit;
+  }
+  .name {
+    display: block;
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 8vw, 3.25rem);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .tagline {
+    display: block;
+    margin-top: 0.4rem;
+    font-style: italic;
+    font-size: 1.05rem;
   }
   nav {
     display: flex;
-    gap: 1.25rem;
-    font-size: 0.95rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--fg);
+    max-width: 44rem;
+    font-family: var(--sans);
+    font-size: 1.05rem;
   }
   nav a {
     text-decoration: none;
     color: var(--muted);
   }
+  nav a:hover,
   nav a[aria-current="page"] {
     color: var(--fg);
+  }
+  nav a[aria-current="page"] {
     text-decoration: underline;
     text-decoration-color: var(--accent);
   }
@@ -103,6 +128,7 @@ const isActive = (href: string) =>
     padding-top: 1.5rem;
     padding-bottom: 3rem;
     border-top: 1px solid var(--faint);
+    font-family: var(--sans);
     font-size: 0.875rem;
     color: var(--muted);
   }

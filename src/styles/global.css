@@ -1,9 +1,9 @@
 :root {
-  --bg: #dce7f5;
-  --fg: #0d1a2e;
-  --muted: #475a78;
-  --faint: #b3c5de;
-  --accent: #1f4bb8;
+  --bg: #eef2f7;
+  --fg: #161b24;
+  --muted: #667085;
+  --faint: #d2d9e3;
+  --accent: #2f5aa8;
   --serif: "Libre Caslon Text", "Iowan Old Style", Georgia, serif;
   --display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
   --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
@@ -13,11 +13,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1628;
-    --fg: #e3eaf5;
-    --muted: #8fa3c2;
-    --faint: #22355a;
-    --accent: #8db6ff;
+    --bg: #161b24;
+    --fg: #e6eaf0;
+    --muted: #97a1b2;
+    --faint: #2c3442;
+    --accent: #9dbcf0;
     color-scheme: dark;
   }
 }
@@ -36,7 +36,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 400 1.0625rem/1.65 var(--sans);
+  font: 400 1.125rem/1.7 var(--serif);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,7 +49,7 @@ body {
 a {
   color: inherit;
   text-decoration: underline;
-  text-decoration-color: var(--faint);
+  text-decoration-color: var(--muted);
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
   transition: text-decoration-color 0.15s, color 0.15s;
@@ -95,11 +95,9 @@ p {
 }
 
 .label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.9rem;
   color: var(--muted);
-  margin: 3.5rem 0 1rem;
+  margin: 2.75rem 0 0.75rem;
   font-family: var(--sans);
   font-weight: 500;
 }
@@ -129,7 +127,8 @@ hr {
 }
 .rows .meta {
   color: var(--muted);
-  font-size: 0.875rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
