@@ -1,49 +1,54 @@
 ---
 import Base from "../layouts/Base.astro";
 import { SITE } from "../site";
-
-const jobs = [
-  {
-    name: "Ghost Note",
-    href: "https://www.ghostnoteagency.com",
-    role: "growth",
-    body: "I bring in new business. That means meeting people, figuring out what they actually need, and turning good conversations into good clients.",
-  },
-  {
-    name: "Integral",
-    role: "operations",
-    body: "I keep the machine running. Timelines, handoffs, who's doing what, and making sure the work ships without everyone losing their minds.",
-  },
-  {
-    name: "Fredo's House",
-    role: "my own thing",
-    body: "Where I write, try out ideas, and sometimes help founders and agencies get their ops in order.",
-  },
-];
 ---
 
-<Base title="Work" description="Growth at Ghost Note, ops at Integral, and Fredo's House on the side.">
+<Base title="What I do" description="Growth at Ghost Note, operations at Integral, and Fredo’s House.">
   <h1>What I do</h1>
-  <p class="lede">
-    Two jobs, one side thing, and usually 10 to 20 accounts going at once.
-  </p>
 
-  {
-    jobs.map((j) => (
-      <>
-        <p class="label">{j.role}</p>
-        <h3>{j.href ? <a href={j.href}>{j.name}</a> : j.name}</h3>
-        <p>{j.body}</p>
-      </>
-    ))
-  }
-
-  <p class="label">want help?</p>
+  <p class="label">growth</p>
+  <h3><a href="https://www.ghostnoteagency.com">Ghost Note</a></h3>
+  <p>I help the agency grow.</p>
   <p>
-    If your team is buried and needs someone to sort out how the work gets
-    done, email me:{" "}
-    <a href={`mailto:${SITE.email}?subject=Hey%20Fredo`}>{SITE.email}</a>.
+    That means finding new opportunities, building relationships, talking to
+    people, understanding what they need, and connecting the right people to the
+    right work.
   </p>
+  <p>
+    I like the relationship part most. I’m not really interested in selling
+    someone something they don’t need.
+  </p>
+  <p>
+    I’d rather meet someone, understand what they’re trying to do, and see if
+    there’s a reason we should work together.
+  </p>
+
+  <p class="label">operations</p>
+  <h3>Integral</h3>
+  <p>I help keep the machine moving.</p>
+  <p>
+    There are usually a hundred little things happening at once — timelines,
+    clients, teams, budgets, decisions, handoffs.
+  </p>
+  <p>My job is often to look at all of it and figure out what needs to happen next.</p>
+  <p>I’m good at taking something that feels messy and making it feel manageable.</p>
+
+  <p class="label">my corner</p>
+  <h3>Fredo’s House</h3>
+  <p>This is my little corner of the internet.</p>
+  <p>
+    I write about work, growth, operations, agency life, money, relationships,
+    ideas I’m thinking about, and whatever else I’m trying to figure out.
+  </p>
+  <p>It’s less of a business and more of a place to think out loud.</p>
+
+  <p class="label">if you want to talk</p>
+  <p>
+    If you’re building something, running an agency, trying to grow a business,
+    or just want to grab a coffee and talk about what’s going on:{" "}
+    <a href={`mailto:${SITE.email}?subject=Hey%20Fredo`}>{SITE.email}</a>
+  </p>
+  <p>I read everything.</p>
 </Base>
 
 <style>

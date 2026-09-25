@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 import PostList from "../components/PostList.astro";
+import Ticker from "../components/Ticker.astro";
+import RightNow from "../components/RightNow.astro";
 import { getPosts } from "../lib";
 import { SITE } from "../site";
 
@@ -8,43 +10,49 @@ const recent = (await getPosts()).slice(0, 5);
 ---
 
 <Base>
-  <h2 class="welcome">Hey, I'm Fredo.</h2>
-  <p>
-    Alfred on paper, Fredo to everyone else. I'm the person who makes sure
-    things actually get done.
-  </p>
+  <Ticker />
 
-  <p class="label">present</p>
-  <p>Most of my time goes to two places:</p>
+  <h2 class="welcome">Hey, I’m Fredo.</h2>
+  <p>Alfred on paper. Fredo to everyone else.</p>
   <p>
-    <strong>Growth at <a href="https://www.ghostnoteagency.com">Ghost Note</a>.</strong>{" "}
-    Finding new clients, building relationships, and helping the agency grow.
+    I spend most of my time doing two things: growth at{" "}
+    <a href="https://www.ghostnoteagency.com">Ghost Note</a> and operations at
+    Integral.
   </p>
   <p>
-    <strong>Operations at Integral.</strong> Keeping projects moving, keeping
-    people unblocked, and making sure nothing falls through the cracks.
+    At Ghost Note, I work on the growth side of the business — finding new
+    opportunities, meeting people, building relationships, and figuring out how
+    to turn a good conversation into good work.
   </p>
   <p>
-    On any given week I'm running somewhere between 10 and 20 different
-    accounts. It's probably the African in me. Working hard is the only mode I
-    was ever taught.
+    At Integral, I’m more behind the scenes. I help keep the work moving —
+    clients, timelines, people, budgets, handoffs, and all the random stuff that
+    has to happen for a team to do its best work.
+  </p>
+  <p>Most weeks I’m somewhere between 10 and 20 different accounts at once.</p>
+  <p>
+    It’s a lot. But I like being in the middle of things. I like figuring out
+    what’s stuck, making the right connection, and getting people moving again.
   </p>
   <p>
-    The rest of the time I'm trying to keep my own life afloat and have some
-    fun in {SITE.location}.
+    I think it’s probably my African upbringing. Working hard is the only mode I
+    was really taught.
   </p>
+  <p>But work isn’t the whole thing.</p>
+  <p>
+    I’m also trying to build a life I actually enjoy. I’m in Seattle now, which
+    means I’m trying to explore the city, meet good people, spend time with the
+    people I care about, travel when I can, and have some fun in between all the
+    work.
+  </p>
+  <p>I’m still figuring out the balance.</p>
 
-  <p class="label">past</p>
-  <p>
-    I started out as a creative project manager and figured out pretty quickly
-    I'm not really a project manager. I'm an operator. That's where{" "}
-    <a href="/work">Fredo's House</a> came from.
-  </p>
+  <RightNow />
 
   {
     recent.length > 0 && (
       <>
-        <p class="label">stuff I've written</p>
+        <p class="label">stuff I’ve written</p>
         <PostList posts={recent} />
         <p style="margin-top:1rem">
           <a href="/writing">All of it →</a>
@@ -53,11 +61,13 @@ const recent = (await getPosts()).slice(0, 5);
     )
   }
 
-  <p class="label">say hi</p>
+  <p class="label">if you want to talk</p>
   <p>
-    Just email me: <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Work
-    stuff, Seattle recs, whatever. I read everything.
+    If you’re building something, running an agency, trying to grow a business,
+    or just want to grab a coffee and talk about what’s going on:
   </p>
+  <p><a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+  <p>I read everything.</p>
 </Base>
 
 <style>

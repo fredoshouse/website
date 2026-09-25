@@ -1,0 +1,98 @@
+---
+import { getNow } from "../lib";
+
+const now = await getNow();
+const items = [
+  { k: "reading", v: `${now.reading.title}${now.reading.by ? ` by ${now.reading.by}` : ""}` },
+  { k: "on repeat", v: `${now.listening.title}${now.listening.by ? ` by ${now.listening.by}` : ""}` },
+  { k: "accounts", v: `${now.accounts} going at once` },
+  ...now.onMyMind.slice(0, 1).map((m) => ({ k: "on my mind", v: m.text })),
+  { k: "based in", v: "Seattle" },
+];
+---
+
+<a class="ticker" href="#right-now" aria-label="What I'm up to right now">
+  <div class="track">
+    {
+      [0, 1].map((copy) => (
+        <ul aria-hidden={copy === 1 ? "true" : undefined}>
+          {items.map((i) => (
+            <li>
+              <span class="k">{i.k}</span> {i.v}
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</a>
+
+<style>
+  .ticker {
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--faint);
+    padding: 0.6rem 0;
+    margin-bottom: 3rem;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .ticker:hover {
+    color: var(--fg);
+  }
+  .track {
+    display: flex;
+    width: max-content;
+  }
+  ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    white-space: nowrap;
+    padding-right: 2.5rem;
+  }
+  li::before {
+    content: "●";
+    font-size: 0.5em;
+    vertical-align: middle;
+    margin-right: 0.6rem;
+    color: var(--accent);
+  }
+  .k {
+    color: var(--fg);
+    font-weight: 500;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: scroll 45s linear infinite;
+    }
+    .ticker:hover .track,
+    .ticker:focus-visible .track {
+      animation-play-state: paused;
+    }
+    @keyframes scroll {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .track {
+      width: auto;
+    }
+    ul {
+      flex-wrap: wrap;
+      gap: 0.25rem 0;
+    }
+    ul[aria-hidden] {
+      display: none;
+    }
+  }
+</style>

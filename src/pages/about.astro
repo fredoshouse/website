@@ -3,27 +3,35 @@ import Base from "../layouts/Base.astro";
 import { SITE, ELSEWHERE } from "../site";
 ---
 
-<Base title="About">
-  <h1>About me</h1>
+<Base title="The other stuff">
+  <h1>The other stuff</h1>
   <div class="prose">
+    <p>Work matters a lot to me.</p>
     <p>
-      I'm Alfred Adarkwah. Everybody calls me Fredo.
+      I like making money. I like building things. I like being useful. I like
+      winning.
     </p>
+    <p>But I’m learning that a good life has to be bigger than work.</p>
     <p>
-      I do growth at Ghost Note and operations at Integral. Most weeks that
-      means juggling 10 to 20 accounts, a lot of calls, and a to-do list that
-      never really ends.
+      I want good relationships. I want to be around people I love. I want to
+      travel. I want to stay healthy. I want to experience things. I want to
+      have enough money that I’m not constantly worried about money.
     </p>
+    <p>And I want to have some fun.</p>
     <p>
-      Why so much? Probably the African in me. Working hard was the only mode I
-      was taught, and I haven't figured out how to turn it off yet. I'm not
-      sure I want to.
+      I’m ambitious, but I don’t want to spend my whole life being busy just
+      because I know how to be busy.
     </p>
-    <p>
-      When I'm not working I'm trying to keep my life afloat and have some fun
-      in {SITE.location}. Some weeks go better than others.
-    </p>
+    <p>That’s probably the thing I’m still working on.</p>
   </div>
+
+  <p class="label">if you want to talk</p>
+  <p>
+    If you’re building something, running an agency, trying to grow a business,
+    or just want to grab a coffee and talk about what’s going on:{" "}
+    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+  </p>
+  <p>I read everything.</p>
 
   <p class="label">find me</p>
   <ul class="rows">

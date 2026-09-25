@@ -4,7 +4,7 @@ export const SITE = {
   nickname: "Fredo",
   title: "Alfred “Fredo” Adarkwah",
   description:
-    "Hey, I'm Fredo. Growth at Ghost Note, ops at Integral, and trying to have some fun in Seattle along the way.",
+    "Hey, I’m Fredo. Growth at Ghost Note, operations at Integral, and trying to build a life I actually enjoy in Seattle.",
   email: "alfred@fredoshouse.com",
   location: "Seattle",
   tagline: "Growth at Ghost Note. Ops at Integral.",
@@ -26,7 +26,7 @@ export const ELSEWHERE = [
 export const SERIES: Record<string, { name: string; blurb: string }> = {
   letters: {
     name: "Fredo's Letters",
-    blurb: "Thoughts on work, agencies, and keeping it all together.",
+    blurb: "Thinking out loud about work, growth, and agency life.",
   },
   lessons: {
     name: "Fredo's Lessons",

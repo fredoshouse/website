@@ -16,6 +16,22 @@ npm run build    # outputs to dist/
 - **Pages:** `src/pages/` (`index`, `work`, `about`, `writing/`)
 - **Styles & colors:** `src/styles/global.css`
 
+### The ticker and "right now"
+
+Everything in the scrolling ticker and the "right now" section on the home page comes from `src/now.ts`: what you're reading, what's on repeat, how many accounts you're juggling, what's on your mind, and moodboard photos. Edit that file and bump `updated`.
+
+- **On my mind** is a running log: add new lines at the top, keep the old ones.
+- **Moodboard:** drop photos in `public/moodboard/` and list them in `moodboard`. The section stays hidden on the live site until there's at least one photo.
+
+Optional auto-updates, set as environment variables on your host:
+
+| Variable | What it does |
+| --- | --- |
+| `GOODREADS_USER_ID` | Pulls the top book off your Goodreads "currently reading" shelf |
+| `LASTFM_USER`, `LASTFM_API_KEY` | Pulls the last album you played (Spotify can scrobble to Last.fm) |
+
+These are fetched when the site builds, so set up a daily scheduled rebuild on your host to keep them fresh. If anything fails, the site just falls back to `src/now.ts`.
+
 ### Adding a post
 
 Create a Markdown file in `src/content/writing/`. The filename becomes the URL (`/writing/<filename>`).
