@@ -34,7 +34,7 @@ These are fetched when the site builds, so set up a daily scheduled rebuild on y
 
 ### Timeline
 
-The sliding "path so far" timeline on the home page reads from `src/timeline.ts`. Oldest first; the last entry gets the highlighted "now" dot.
+The sliding "path so far" timeline on the home page runs from 1996 to now and reads from `src/timeline.ts`. Add a year to `STOPS` with an emoji, a title and an optional note; years you skip show as small ticks.
 
 ### Newsletter (beehiiv)
 
