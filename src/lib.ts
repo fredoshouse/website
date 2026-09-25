@@ -91,7 +91,7 @@ function merge(
   live: LiveItem | null,
 ): NowItem {
   const take = isTodo(manual.take) ? undefined : manual.take;
-  if (!live) return { ...manual, href: manual.href || undefined, take: manual.take };
+  if (!live) return { ...manual, href: manual.href || undefined, take };
   return { ...live, take: same(live.title, manual.title) ? take : undefined };
 }
 

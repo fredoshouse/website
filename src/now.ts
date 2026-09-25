@@ -14,17 +14,17 @@ export const NOW = {
   updated: "2026-09-25",
 
   reading: {
-    title: "TODO: book title",
-    author: "TODO: author",
+    title: "Never Eat Alone",
+    author: "Keith Ferrazzi",
     href: "", // link to the book (Goodreads, Bookshop, wherever)
-    take: "TODO: your take so far, one or two lines.",
+    take: "", // your take so far, one or two lines
   },
 
   listening: {
-    title: "TODO: album or song",
-    artist: "TODO: artist",
-    href: "", // Spotify / Apple Music / Bandcamp link
-    take: "TODO: why it's on repeat.",
+    title: "Quebec",
+    artist: "Drake",
+    href: "", // Spotify / Apple Music link
+    take: "", // why it's on repeat
   },
 
   // How many accounts/projects you're juggling right now.
